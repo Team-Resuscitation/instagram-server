@@ -1,11 +1,14 @@
 package com.resuscitation.Instagram.user.controller;
 
+import com.resuscitation.Instagram.user.dto.JwtDto;
 import com.resuscitation.Instagram.user.dto.LoginFormDto;
 import com.resuscitation.Instagram.user.dto.RegisterFormDto;
+import com.resuscitation.Instagram.user.entity.UserEntity;
 import com.resuscitation.Instagram.user.service.UserService;
 import com.resuscitation.Instagram.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +37,8 @@ public class UserController {
      * @return JWT
      */
     @PostMapping("/register")
-    @Operation(summary = "회원가입 API")
-    public ResponseEntity<String> register(
+    @Operation(summary = "회원가입 API" )
+    public ResponseEntity<JwtDto> register(
             @RequestBody RegisterFormDto registerFormDto
     ) {
         return ResponseEntity.ok(userService.register(registerFormDto));
@@ -49,11 +52,23 @@ public class UserController {
      */
     @PostMapping("/login")
     @Operation(summary = "로그인 API")
-    public ResponseEntity<String> login(
+    public ResponseEntity<JwtDto> login(
             @RequestBody LoginFormDto loginFormDto
     ) {
-        String token = userService.login(loginFormDto);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(userService.login(loginFormDto));
+    }
+
+    /**
+     * 개인 정보 조회 API
+     * @param req HttpServletRequest
+     * @return UserEntity 유저 정보
+     */
+    @GetMapping("/whois")
+    public ResponseEntity<UserEntity> whois(
+            HttpServletRequest req
+    ) {
+        UserEntity user = userService.whois(req);
+        return ResponseEntity.ok(user);
     }
 
 }

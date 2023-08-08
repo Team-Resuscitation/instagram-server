@@ -14,13 +14,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 보안 해체
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        // JWT 사용을 위한 CSRF 해제
         http.csrf(csrf -> csrf.disable());
 
-
+        // Spring Security Request 보안 설정
+        // TODO: 로그인, 회원 가입을 제외한 모든 요청에 isAuthenticate 추가
         http.authorizeRequests().anyRequest().permitAll();
 
         return http.build();

@@ -4,6 +4,12 @@ spring:
     username: sa
     password:
 
+security:
+  jwt:
+    token:
+      secret-key: your-256-bit-secret,your-256-bit-secret
+      expire-length: 3600000
+
 ---
 
 spring:
@@ -14,3 +20,9 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
+
+security:
+  jwt:
+    token:
+      secret-key: ${JWT_SECRET_KEY}
+      expire-length: 3600000
