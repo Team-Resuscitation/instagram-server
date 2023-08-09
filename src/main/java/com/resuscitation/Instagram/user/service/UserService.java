@@ -56,4 +56,11 @@ public interface UserService {
      * @return UserEntity
      */
     UserEntity whois(HttpServletRequest req);
+
+    /**
+     * 회원 탈퇴 메소드
+     * @param req HttpServletRequest
+     * @return 회웥 탈퇴 성공시 true 반환
+     */
+    boolean deleteUser(HttpServletRequest req);
 }

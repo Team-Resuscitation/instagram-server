@@ -99,10 +99,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity whois(HttpServletRequest token) {
+    public UserEntity whois(HttpServletRequest req) {
 
-        Long userIdx = jwtTokenProvider.getUid(token);
+        Long userIdx = jwtTokenProvider.getUid(req);
 
         return userRepository.findById(userIdx).orElseThrow(null);
+    }
+
+    @Override
+    public boolean deleteUser(HttpServletRequest req) {
+        Long userIdx = jwtTokenProvider.getUid(req);
+        UserEntity user = userRepository.findById(userIdx).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+
+        userRepository.deleteById(userIdx);
+
+        return true ;
     }
 }

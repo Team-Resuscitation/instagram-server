@@ -72,4 +72,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(
+            HttpServletRequest req
+    ){
+        boolean result = userService.deleteUser(req);
+        return ResponseEntity.ok("회원 탈퇴가 완료 되었습니다.");
+    }
+
 }
