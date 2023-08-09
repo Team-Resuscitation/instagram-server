@@ -22,8 +22,11 @@ public class UserEntity(
         @Column(unique = true)
         var oauthToken: String? = null,
 
+        @ElementCollection(fetch = FetchType.EAGER)
+        var roles: MutableList<UserRole> = mutableListOf()
 
-        ) {
+
+) {
     override fun toString(): String {
         return "UserEntity(idx=$idx, nickname='$nickname', email='$email', password='$password', name='$name', introduce='$introduce', oauthToken=$oauthToken)"
     }

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-       /**
+    /**
      * 회원 가입 메소드
      *
      * @param registerFormDto 회원 가입 폼
@@ -51,6 +51,7 @@ public interface UserService {
 
     /**
      * 유저 정보 불러오기
+     *
      * @param req HttpServletRequest
      * @return UserEntity
      */

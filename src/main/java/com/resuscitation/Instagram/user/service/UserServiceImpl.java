@@ -35,24 +35,26 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("중복 이메일");
         }
 
+        // Client Role 설정
+        List<UserRole> roles = new ArrayList<>();
+        roles.add(UserRole.ROLE_CLIENT);
+
         UserEntity user = new UserEntity();
         user.setEmail(registerFormDto.getEmail());
         user.setIntroduce(registerFormDto.getIntroduce());
         user.setName(registerFormDto.getName());
         user.setNickname(registerFormDto.getNickname());
         user.setIntroduce(registerFormDto.getNickname());
+        user.setRoles(roles);
 
         // 비밀번호 암호화
         user.setPassword(passwordEncoder.encode(registerFormDto.getPassword()));
 
         UserEntity saved = userRepository.save(user);
 
-        List<UserRole> roles = new ArrayList<>();
-        roles.add(UserRole.ROLE_CLIENT);
-
         // Json으로 감싸기
         JwtDto jwtDto = new JwtDto();
-        jwtDto.setToken("Bearer "+jwtTokenProvider.createToken(saved,roles ));
+        jwtDto.setToken("Bearer " + jwtTokenProvider.createToken(saved, saved.getRoles()));
 
         return jwtDto;
     }
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
         // 객체로 변환하기
         JwtDto jwtDto = new JwtDto();
-        jwtDto.setToken("Bearer "+jwtTokenProvider.createToken(user.get(),roles ));
+        jwtDto.setToken("Bearer " + jwtTokenProvider.createToken(user.get(), roles));
 
 
         return jwtDto;

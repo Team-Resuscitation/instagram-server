@@ -7,7 +7,7 @@ spring:
 security:
   jwt:
     token:
-      secret-key: your-256-bit-secret,your-256-bit-secret
+      secret-key: your_256_bit_secret_your_256_bit_secret
       expire-length: 3600000
 
 ---

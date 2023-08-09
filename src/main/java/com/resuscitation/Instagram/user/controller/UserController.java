@@ -37,7 +37,7 @@ public class UserController {
      * @return JWT
      */
     @PostMapping("/register")
-    @Operation(summary = "회원가입 API" )
+    @Operation(summary = "회원가입 API")
     public ResponseEntity<JwtDto> register(
             @RequestBody RegisterFormDto registerFormDto
     ) {
@@ -60,6 +60,7 @@ public class UserController {
 
     /**
      * 개인 정보 조회 API
+     *
      * @param req HttpServletRequest
      * @return UserEntity 유저 정보
      */
