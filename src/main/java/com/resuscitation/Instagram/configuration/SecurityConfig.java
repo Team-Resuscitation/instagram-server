@@ -30,7 +30,6 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         // Spring Security Request 보안 설정
-        // TODO: 로그인, 회원 가입을 제외한 모든 요청에 isAuthenticate 추가
         http.authorizeRequests()
                 .requestMatchers("/h2-console/**",
                         "/swagger-ui/**",
