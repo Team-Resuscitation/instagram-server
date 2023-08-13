@@ -9,30 +9,88 @@ name: Continuous Delivery
 
 on:
   push:
-    # 추후 main 으로 변경 해야함
-    branches: [ "*" ]
+    branches: ["main"]
 
 jobs:
   Deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2
+      - uses: actions/checkout@v3
 
-    - name: Deploy use SCP
-      uses: appleboy/scp-action@master
-      with:
-        username: ubuntu
-        host: ${{ secrets.AWS_HOST }}
-        key: ${{ secrets.AWS_PEM_KEY }}
-        source: "./build/libs/*.jar"
-        target: "/home/ubuntu/insta"
+      # JDK 17 설치
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      # gralew 권한 설정
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
+
+      # gradle 빌드
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2.7.0
+        with:
+          arguments: build
+
+      # IP 주소를 알아내기 위한 작업
+      - name: Get Github Actions IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      # AWS Credential 서비스계정을 통한 로그인
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      # AWS 보안 그룹에 Github Actions IP 추가
+      - name: Add Github Actions IP to Security group
+        run: |
+          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      # AWS EC2 안스턴스로 파일 전송
+      - name: Deploy use SCP
+        uses: appleboy/scp-action@209e8c05e0492f6ed6fe8a22dfcaefb083c4cf35
+        with:
+          username: ubuntu
+          host: ${{ secrets.AWS_HOST }}
+          key: ${{ secrets.AWS_PEM_KEY }}
+          source: "./build/libs/*.jar"
+          target: "~/insta"
+
+      # AWS EC2 인스턴스에 SSH 접속 후 Spring application 실행
+      - name: Deploy use SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ubuntu
+          key: ${{ secrets.AWS_PEM_KEY }}
+          port: 22
+          command_timeout: 1m
+          script: |
+            # 현재 실행중인 프로세스 확인
+            sudo lsof -i :80
+            processes=$(sudo lsof -i :80 | grep LISTEN | awk '{print $2}')
+            for process in $processes; do
+                echo "Killing process $process"
+                sudo kill -9 $process
+            done
+
+            echo "Processes using port 80 have been terminated."
+
+            # Spring application 실행 및 로그 파일로 출력 리다이렉트
+            sudo nohup java -jar ~/insta/build/libs/Instagram-0.0.1-SNAPSHOT.jar --server.port=80 > ~/spring_log.txt 2>&1 &
+
+            # 배포 과정이 완료되었음을 알리기 위해 파일 생성
+            touch ~/deployment_completed.txt
+
+      # AWS 보안 그룹에 Github Actions IP 삭제
+      - name: Remove Github Actions IP From Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
