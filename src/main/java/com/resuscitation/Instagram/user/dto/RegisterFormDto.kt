@@ -1,6 +1,7 @@
 package com.resuscitation.Instagram.user.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.Pattern
 
 /**
  * 회원가입 폼
@@ -10,6 +11,7 @@ class RegisterFormDto(
         @Schema(description = "이메일", example = "test@test.com")
         var email: String = "",
         @Schema(description = "비밀번호", example = "password!!!")
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d!@#\$%^&*()\\-_=+{};:,<.>/?]).{8,}\$\n")
         var password: String = "",
         @Schema(description = "닉네임", example = "tester_nickname")
         var nickname: String = "",

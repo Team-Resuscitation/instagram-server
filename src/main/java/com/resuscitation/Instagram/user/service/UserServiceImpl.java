@@ -1,10 +1,7 @@
 package com.resuscitation.Instagram.user.service;
 
 import com.resuscitation.Instagram.jwt.JwtTokenProvider;
-import com.resuscitation.Instagram.user.dto.EditProfileDto;
-import com.resuscitation.Instagram.user.dto.JwtDto;
-import com.resuscitation.Instagram.user.dto.LoginFormDto;
-import com.resuscitation.Instagram.user.dto.RegisterFormDto;
+import com.resuscitation.Instagram.user.dto.*;
 import com.resuscitation.Instagram.user.entity.UserEntity;
 import com.resuscitation.Instagram.user.entity.UserRole;
 import com.resuscitation.Instagram.user.repository.UserRepository;
@@ -110,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(userIdx);
 
-        return true ;
+        return true;
     }
 
     @Override
@@ -125,6 +122,33 @@ public class UserServiceImpl implements UserService {
         if (!editProfileDto.getNickname().isEmpty()) user.setNickname(editProfileDto.getNickname());
 
         // User Data Save
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserEntity editPassword(HttpServletRequest req, PasswordChangeFormDto passwordChangeFormDto) {
+        UserEntity user = userRepository.findById(jwtTokenProvider.getUid(req)).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+
+        // 현재 비밀번호를 재확인
+        if (!passwordEncoder.matches(user.getPassword(), passwordChangeFormDto.getCurrentPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        
+        // 새로운 비밀번호와 현재 비밀번호가 일치하는지 확인
+         if (!passwordEncoder.matches(user.getPassword(), passwordChangeFormDto.getNewPassword())) {
+            throw new IllegalArgumentException("현재 비밀번호와 일치합니다.");
+        }
+
+        // 새 비밀번호와 재입력한 새로운 비밀번호 대조
+        if (passwordChangeFormDto.getNewPassword().equals(passwordChangeFormDto.getRePassword())) {
+            throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+        }
+
+        // Password Update
+        user.setPassword(passwordEncoder.encode(passwordChangeFormDto.getNewPassword()));
+
         return userRepository.save(user);
     }
 }

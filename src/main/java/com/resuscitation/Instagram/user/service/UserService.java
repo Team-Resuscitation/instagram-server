@@ -1,9 +1,6 @@
 package com.resuscitation.Instagram.user.service;
 
-import com.resuscitation.Instagram.user.dto.EditProfileDto;
-import com.resuscitation.Instagram.user.dto.JwtDto;
-import com.resuscitation.Instagram.user.dto.LoginFormDto;
-import com.resuscitation.Instagram.user.dto.RegisterFormDto;
+import com.resuscitation.Instagram.user.dto.*;
 import com.resuscitation.Instagram.user.entity.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -60,6 +57,7 @@ public interface UserService {
 
     /**
      * 회원 탈퇴 메소드
+     *
      * @param req HttpServletRequest
      * @return 회웥 탈퇴 성공시 true 반환
      */
@@ -67,9 +65,19 @@ public interface UserService {
 
     /**
      * 프로필 수정 메소드
-     * @param req HttpServletRequest
+     *
+     * @param req            HttpServletRequest
      * @param editProfileDto EditProfileDto
      * @return 저장된 유저 정보 반환
      */
     UserEntity editProfile(HttpServletRequest req, EditProfileDto editProfileDto);
+
+    /**
+     * 패스워드 수정 메소드
+     *
+     * @param req                   HttpServletRequest
+     * @param passwordChangeFormDto 비밀번호 변경 폼
+     * @return 저장된 유저 정보 반환
+     */
+    UserEntity editPassword(HttpServletRequest req, PasswordChangeFormDto passwordChangeFormDto);
 }
