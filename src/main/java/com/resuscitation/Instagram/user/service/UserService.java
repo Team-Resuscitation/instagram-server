@@ -1,5 +1,6 @@
 package com.resuscitation.Instagram.user.service;
 
+import com.resuscitation.Instagram.user.dto.EditProfileDto;
 import com.resuscitation.Instagram.user.dto.JwtDto;
 import com.resuscitation.Instagram.user.dto.LoginFormDto;
 import com.resuscitation.Instagram.user.dto.RegisterFormDto;
@@ -63,4 +64,12 @@ public interface UserService {
      * @return 회웥 탈퇴 성공시 true 반환
      */
     boolean deleteUser(HttpServletRequest req);
+
+    /**
+     * 프로필 수정 메소드
+     * @param req HttpServletRequest
+     * @param editProfileDto EditProfileDto
+     * @return 저장된 유저 정보 반환
+     */
+    UserEntity editProfile(HttpServletRequest req, EditProfileDto editProfileDto);
 }

@@ -1,6 +1,7 @@
 package com.resuscitation.Instagram.user.service;
 
 import com.resuscitation.Instagram.jwt.JwtTokenProvider;
+import com.resuscitation.Instagram.user.dto.EditProfileDto;
 import com.resuscitation.Instagram.user.dto.JwtDto;
 import com.resuscitation.Instagram.user.dto.LoginFormDto;
 import com.resuscitation.Instagram.user.dto.RegisterFormDto;
@@ -80,14 +81,9 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        // TODO: Security 작업 때 UserRole 추가하기
-        List<UserRole> roles = new ArrayList<>();
-        roles.add(UserRole.ROLE_CLIENT);
-
         // 객체로 변환하기
         JwtDto jwtDto = new JwtDto();
-        jwtDto.setToken("Bearer " + jwtTokenProvider.createToken(user.get(), roles));
-
+        jwtDto.setToken("Bearer " + jwtTokenProvider.createToken(user.get(), user.get().getRoles()));
 
         return jwtDto;
     }
@@ -115,5 +111,20 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userIdx);
 
         return true ;
+    }
+
+    @Override
+    public UserEntity editProfile(HttpServletRequest req, EditProfileDto editProfileDto) {
+        UserEntity user = userRepository.findById(jwtTokenProvider.getUid(req)).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+
+        // 유저 정보 업데이트
+        user.setName(editProfileDto.getName());
+        user.setIntroduce(editProfileDto.getIntroduce());
+        if (!editProfileDto.getNickname().isEmpty()) user.setNickname(editProfileDto.getNickname());
+
+        // User Data Save
+        return userRepository.save(user);
     }
 }

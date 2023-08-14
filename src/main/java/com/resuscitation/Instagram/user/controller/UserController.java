@@ -80,4 +80,14 @@ public class UserController {
         return ResponseEntity.ok("회원 탈퇴가 완료 되었습니다.");
     }
 
+    @PatchMapping("/update")
+    public ResponseEntity<UserEntity> updateProfile(
+            HttpServletRequest req,
+            @RequestBody EditProfileDto editProfileDto
+            ){
+        UserEntity user = userService.editProfile(req,editProfileDto);
+
+        return ResponseEntity.ok(user);
+    }
+
 }
