@@ -84,7 +84,7 @@ jobs:
             echo "Processes using port 80 have been terminated."
 
             # Spring application 실행 및 로그 파일로 출력 리다이렉트
-            sudo nohup java -jar ~/insta/build/libs/Instagram-0.0.1-SNAPSHOT.jar --server.port=80 > ~/spring_log.txt 2>&1 &
+            sudo nohup java -jar ~/insta/build/libs/Instagram-0.0.1-SNAPSHOT.jar  --spring.profiles.active=prod --server.port=80 > ~/spring_log.txt 2>&1 &
 
             # 배포 과정이 완료되었음을 알리기 위해 파일 생성
             touch ~/deployment_completed.txt
