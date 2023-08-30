@@ -27,7 +27,7 @@ class UserControllerTest {
     private UserController userController;
 
     String email = "test@test.com";
-    String password = "Password!!!";
+    String password = "Password1234@@@";
     String nickname = "test nickname";
     String name = "test name";
     String introduce = "test introduce";
@@ -36,6 +36,8 @@ class UserControllerTest {
     void setup() {
         RegisterFormDto registerFormDto = new RegisterFormDto(email, password, nickname, name, introduce);
         ResponseEntity<JwtDto> response = userController.register(registerFormDto);
+        System.out.println("BeforeAll 작동");
+        System.out.println(registerFormDto.toString());
     }
 
     @Test
@@ -43,7 +45,8 @@ class UserControllerTest {
     void register() {
 
         // GIVEN
-        RegisterFormDto registerFormDto = new RegisterFormDto(email + "123", password, nickname, name, introduce);
+        RegisterFormDto registerFormDto = new RegisterFormDto( "123asf"+email, password, nickname, name, introduce);
+        System.out.println(registerFormDto.toString());
 
         // WHEN
         ResponseEntity<JwtDto> response = userController.register(registerFormDto);
@@ -115,6 +118,7 @@ class UserControllerTest {
 
         //When
         MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", loginResponse.getBody().getToken());
         ResponseEntity<UserEntity> response = userController.whois(request);
         UserEntity responseUser = response.getBody();
 
@@ -131,8 +135,8 @@ class UserControllerTest {
         //Given
         LoginFormDto loginFormDto = new LoginFormDto(email, password);
         ResponseEntity<JwtDto> loginResponse = userController.login(loginFormDto);
-        String newPassword = "PassWord!!!";
-        String rePassword = "PassWord!!!";
+        String newPassword = "PassWord!!!@@@123";
+        String rePassword = "PassWord!!!@@@123";
         PasswordChangeFormDto passwordChangeFormDto = new PasswordChangeFormDto(password, newPassword, rePassword);
         String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
 

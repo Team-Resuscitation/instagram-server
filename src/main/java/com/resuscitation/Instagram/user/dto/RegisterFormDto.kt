@@ -19,4 +19,9 @@ class RegisterFormDto(
         var name: String = "",
         @Schema(description = "설명", example = "테스트 유저 입니다.")
         var introduce: String = "",
-)
+){
+        override fun toString(): String {
+                return "RegisterFormDto(email='$email', password='$password', nickname='$nickname', name='$name', introduce='$introduce')"
+        }
+
+}

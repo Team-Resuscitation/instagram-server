@@ -29,7 +29,11 @@ public class UserServiceImpl implements UserService {
     public JwtDto register(RegisterFormDto registerFormDto) throws IllegalArgumentException {
 
         // 아이디 중복 확인
-        if (userRepository.existsByEmail(registerFormDto.getEmail())) {
+//        if (userRepository. existsByEmail(registerFormDto.getEmail())) {
+//            throw new IllegalArgumentException("중복 이메일");
+//        }
+        if (userRepository.findByEmail(registerFormDto.getEmail()).isPresent()){
+            System.out.println(userRepository.findByEmail(registerFormDto.getEmail()));
             throw new IllegalArgumentException("중복 이메일");
         }
 
