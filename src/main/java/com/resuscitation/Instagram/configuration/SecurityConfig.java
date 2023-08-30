@@ -5,6 +5,7 @@ import com.resuscitation.Instagram.security.JwtTokenFilterConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -27,10 +28,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         // JWT 사용을 위한 CSRF 해제
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         // Spring Security Request 보안 설정
-        http.authorizeRequests()
+        http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/h2-console/**",
                         "/swagger-ui/**",
                         "/swagger-resources/**",
@@ -38,7 +39,8 @@ public class SecurityConfig {
                         "/user/login",
                         "/user/register")
                 .permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+        );
 
         http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 

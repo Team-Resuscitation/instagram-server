@@ -1,9 +1,7 @@
 package com.resuscitation.Instagram.user.service;
 
 import com.resuscitation.Instagram.jwt.JwtTokenProvider;
-import com.resuscitation.Instagram.user.dto.JwtDto;
-import com.resuscitation.Instagram.user.dto.LoginFormDto;
-import com.resuscitation.Instagram.user.dto.RegisterFormDto;
+import com.resuscitation.Instagram.user.dto.*;
 import com.resuscitation.Instagram.user.entity.UserEntity;
 import com.resuscitation.Instagram.user.entity.UserRole;
 import com.resuscitation.Instagram.user.repository.UserRepository;
@@ -31,7 +29,11 @@ public class UserServiceImpl implements UserService {
     public JwtDto register(RegisterFormDto registerFormDto) throws IllegalArgumentException {
 
         // 아이디 중복 확인
-        if (userRepository.existsByEmail(registerFormDto.getEmail())) {
+//        if (userRepository. existsByEmail(registerFormDto.getEmail())) {
+//            throw new IllegalArgumentException("중복 이메일");
+//        }
+        if (userRepository.findByEmail(registerFormDto.getEmail()).isPresent()){
+            System.out.println(userRepository.findByEmail(registerFormDto.getEmail()));
             throw new IllegalArgumentException("중복 이메일");
         }
 
@@ -80,14 +82,9 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        // TODO: Security 작업 때 UserRole 추가하기
-        List<UserRole> roles = new ArrayList<>();
-        roles.add(UserRole.ROLE_CLIENT);
-
         // 객체로 변환하기
         JwtDto jwtDto = new JwtDto();
-        jwtDto.setToken("Bearer " + jwtTokenProvider.createToken(user.get(), roles));
-
+        jwtDto.setToken("Bearer " + jwtTokenProvider.createToken(user.get(), user.get().getRoles()));
 
         return jwtDto;
     }
@@ -114,6 +111,48 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(userIdx);
 
-        return true ;
+        return true;
+    }
+
+    @Override
+    public UserEntity editProfile(HttpServletRequest req, EditProfileDto editProfileDto) {
+        UserEntity user = userRepository.findById(jwtTokenProvider.getUid(req)).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+
+        // 유저 정보 업데이트
+        user.setName(editProfileDto.getName());
+        user.setIntroduce(editProfileDto.getIntroduce());
+        if (!editProfileDto.getNickname().isEmpty()) user.setNickname(editProfileDto.getNickname());
+
+        // User Data Save
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserEntity editPassword(HttpServletRequest req, PasswordChangeFormDto passwordChangeFormDto) {
+        UserEntity user = userRepository.findById(jwtTokenProvider.getUid(req)).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+
+        // 현재 비밀번호를 재확인
+        if (!passwordEncoder.matches(user.getPassword(), passwordChangeFormDto.getCurrentPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        
+        // 새로운 비밀번호와 현재 비밀번호가 일치하는지 확인
+         if (!passwordEncoder.matches(user.getPassword(), passwordChangeFormDto.getNewPassword())) {
+            throw new IllegalArgumentException("현재 비밀번호와 일치합니다.");
+        }
+
+        // 새 비밀번호와 재입력한 새로운 비밀번호 대조
+        if (passwordChangeFormDto.getNewPassword().equals(passwordChangeFormDto.getRePassword())) {
+            throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+        }
+
+        // Password Update
+        user.setPassword(passwordEncoder.encode(passwordChangeFormDto.getNewPassword()));
+
+        return userRepository.save(user);
     }
 }

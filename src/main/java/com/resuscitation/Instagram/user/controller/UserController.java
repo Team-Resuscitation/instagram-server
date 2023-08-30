@@ -1,14 +1,13 @@
 package com.resuscitation.Instagram.user.controller;
 
-import com.resuscitation.Instagram.user.dto.JwtDto;
-import com.resuscitation.Instagram.user.dto.LoginFormDto;
-import com.resuscitation.Instagram.user.dto.RegisterFormDto;
+import com.resuscitation.Instagram.user.dto.*;
 import com.resuscitation.Instagram.user.entity.UserEntity;
 import com.resuscitation.Instagram.user.service.UserService;
 import com.resuscitation.Instagram.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +38,7 @@ public class UserController {
     @PostMapping("/register")
     @Operation(summary = "회원가입 API")
     public ResponseEntity<JwtDto> register(
-            @RequestBody RegisterFormDto registerFormDto
+            @Valid @RequestBody RegisterFormDto registerFormDto
     ) {
         return ResponseEntity.ok(userService.register(registerFormDto));
     }
@@ -53,7 +52,7 @@ public class UserController {
     @PostMapping("/login")
     @Operation(summary = "로그인 API")
     public ResponseEntity<JwtDto> login(
-            @RequestBody LoginFormDto loginFormDto
+            @Valid @RequestBody LoginFormDto loginFormDto
     ) {
         return ResponseEntity.ok(userService.login(loginFormDto));
     }
@@ -75,9 +74,27 @@ public class UserController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(
             HttpServletRequest req
-    ){
+    ) {
         boolean result = userService.deleteUser(req);
         return ResponseEntity.ok("회원 탈퇴가 완료 되었습니다.");
     }
 
+    @PatchMapping("/update")
+    public ResponseEntity<UserEntity> updateProfile(
+            HttpServletRequest req,
+            @RequestBody EditProfileDto editProfileDto
+    ) {
+        UserEntity user = userService.editProfile(req, editProfileDto);
+
+        return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<UserEntity> updatePassword(
+            HttpServletRequest req,
+            @RequestBody PasswordChangeFormDto passwordChangeFormDto
+    ) {
+        UserEntity user = userService.editPassword(req, passwordChangeFormDto);
+        return ResponseEntity.ok(user);
+    }
 }
