@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
         user.setName(editProfileDto.getName());
         user.setIntroduce(editProfileDto.getIntroduce());
         if (!editProfileDto.getNickname().isEmpty()) user.setNickname(editProfileDto.getNickname());
+        user.setProfileImage(user.getProfileImage());
 
         // User Data Save
         return userRepository.save(user);
