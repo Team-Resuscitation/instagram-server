@@ -5,6 +5,7 @@ import com.resuscitation.Instagram.user.dto.LoginFormDto;
 import com.resuscitation.Instagram.user.dto.PasswordChangeFormDto;
 import com.resuscitation.Instagram.user.dto.RegisterFormDto;
 import com.resuscitation.Instagram.user.entity.UserEntity;
+import com.resuscitation.Instagram.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.springframework.test.util.AssertionErrors.*;
 
@@ -25,6 +25,9 @@ class UserControllerTest {
 
     @Autowired
     private UserController userController;
+
+    @Autowired
+    private UserRepository userRepository;
 
     String email = "test@test.com";
     String password = "Password1234@@@";
@@ -45,7 +48,7 @@ class UserControllerTest {
     void register() {
 
         // GIVEN
-        RegisterFormDto registerFormDto = new RegisterFormDto( "123asf"+email, password, nickname, name, introduce);
+        RegisterFormDto registerFormDto = new RegisterFormDto("123asf" + email, password, "123asf" + nickname, name, introduce);
         System.out.println(registerFormDto.toString());
 
         // WHEN
@@ -54,6 +57,7 @@ class UserControllerTest {
         // THEN
         assert (response.getStatusCode().equals(HttpStatusCode.valueOf(200)));
         assertNotNull("회원가입 실패", response.getBody().getToken());
+        assertTrue("이미 존재하는 닉네임", userRepository.existsByNickname(nickname));
     }
 
     @Test

@@ -6,8 +6,9 @@ import jakarta.persistence.*
 public class UserEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var idx: Long? = null,
+        var idx: Long= 0,
 
+        @Column(unique = true)
         var nickname: String = "",
 
         @Column(unique = true)
@@ -18,6 +19,8 @@ public class UserEntity(
         var name: String = "",
 
         var introduce: String = "",
+
+        var profileImage: String = "",
 
         @Column(unique = true)
         var oauthToken: String? = null,
