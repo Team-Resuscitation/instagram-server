@@ -26,13 +26,14 @@ class UserControllerTest {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private UserRepository userRepository;
+
     String email = "test@test.com";
     String password = "Password1234@@@";
     String nickname = "test nickname";
     String name = "test name";
     String introduce = "test introduce";
-    @Autowired
-    private UserRepository userRepository;
 
     @BeforeAll
     void setup() {
