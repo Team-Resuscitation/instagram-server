@@ -1,19 +1,22 @@
 package com.resuscitation.instagram.user.dto
 
-import com.resuscitation.instagram.user.entity.UserEntity
+import com.resuscitation.instagram.post.dto.PostResponseDto
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.ElementCollection
 
-class ProfileDto(
-        // TODO: dto 변경후 불필요한 정보 삭제 해야함
-        var userEntity: UserEntity,
+@Schema(description = "User profile response object")
+data class ProfileDto(
+    @Schema(description = "The nickname of the user", example = "user123")
+    val nickname: String,
 
-        //TODO : article repository에 맞춰서 변경
-        @ElementCollection
-        @Schema(description = "게시물 리스트", example = "none")
-        var postArray: ArrayList<String>,
-) {
-    override fun toString(): String {
-        return "ProfileDto (userEntity = $userEntity, postArray= $postArray)"
-    }
-}
+    @Schema(description = "The name of the user", example = "John Doe")
+    val name: String,
+
+    @Schema(description = "Introduction or bio of the user", example = "Hello! I love coding and sharing knowledge.")
+    val introduce: String,
+
+    @Schema(description = "URL to the user's profile image", example = "https://example.com/images/user123.jpg")
+    val profileImage: String,
+
+    @Schema(description = "User feed")
+    val feed: List<PostResponseDto>,
+)
