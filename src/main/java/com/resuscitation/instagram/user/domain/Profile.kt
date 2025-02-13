@@ -1,6 +1,7 @@
 package com.resuscitation.instagram.user.domain
 
 import jakarta.persistence.*
+import java.sql.Timestamp
 
 @Entity
 class Profile(
@@ -14,4 +15,5 @@ class Profile(
     val profileImage: String = "",
     val following: Int = 0,
     val follower: Int = 0,
+    val lastAccess: Timestamp = Timestamp(System.currentTimeMillis()),
 )
