@@ -66,7 +66,7 @@ class JwtProvider(
         )
     }
 
-    override fun getAuthentication(user: com.resuscitation.instagram.security.auth.dto.AuthenticatedUserDto): Authentication {
+    override fun getAuthentication(user: AuthenticatedUserDto): Authentication {
         val authorities = listOf(SimpleGrantedAuthority(user.role.name))
         return UsernamePasswordAuthenticationToken(user.nickname, null, authorities)
     }
@@ -94,6 +94,7 @@ class JwtProvider(
 
         return true
     }
+
 
     override fun invalidateToken(nickname: String): Boolean {
         redisTemplate.delete(userRepository.findByNickname(nickname).uuid)
