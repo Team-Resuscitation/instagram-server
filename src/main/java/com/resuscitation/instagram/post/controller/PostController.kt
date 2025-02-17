@@ -1,21 +1,30 @@
 package com.resuscitation.instagram.post.controller
 
+import com.resuscitation.instagram.config.SwaggerConfig
 import com.resuscitation.instagram.post.dto.PostRequestDto
 import com.resuscitation.instagram.post.dto.PostResponseDto
 import com.resuscitation.instagram.post.service.PostServiceImpl
-import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v2/post")
 @Tag(name = "Post", description = "Post Controller APIs")
+@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 class PostController(
     private val postService: PostServiceImpl,
 ) {

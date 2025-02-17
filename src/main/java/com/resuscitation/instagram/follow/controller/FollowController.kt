@@ -1,19 +1,26 @@
 package com.resuscitation.instagram.follow.controller
 
+import com.resuscitation.instagram.config.SwaggerConfig
 import com.resuscitation.instagram.follow.dto.FollowDto
 import com.resuscitation.instagram.follow.service.FollowService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v2/follow")
 @Tag(name = "Follow API", description = "API for managing follow requests and relationships")
+@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 class FollowController(
     private val followService: FollowService
 ) {

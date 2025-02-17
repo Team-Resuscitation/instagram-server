@@ -6,6 +6,7 @@ plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+    id("com.gorylenko.gradle-git-properties") version "2.4.2"
     kotlin("plugin.jpa") version "1.9.25"
 }
 

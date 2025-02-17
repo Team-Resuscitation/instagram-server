@@ -1,17 +1,32 @@
 package com.resuscitation.instagram.security.auth.controller
 
-import com.resuscitation.instagram.security.auth.dto.*
+import com.resuscitation.instagram.config.SwaggerConfig
+import com.resuscitation.instagram.security.auth.dto.DeleteUserRequestDto
+import com.resuscitation.instagram.security.auth.dto.DeleteUserResponseDto
+import com.resuscitation.instagram.security.auth.dto.EditUserRequestDto
+import com.resuscitation.instagram.security.auth.dto.EditUserResponseDto
+import com.resuscitation.instagram.security.auth.dto.LoginRequestDto
+import com.resuscitation.instagram.security.auth.dto.LoginResponseDto
+import com.resuscitation.instagram.security.auth.dto.RegisterRequestDto
+import com.resuscitation.instagram.security.auth.dto.RegisterResponseDto
 import com.resuscitation.instagram.security.auth.service.AuthServiceImpl
 import com.resuscitation.instagram.security.auth.service.CustomOAuth2UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v2/auth")
@@ -71,6 +86,7 @@ class AuthController(
         ]
     )
     @PostMapping("/edit")
+    @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
     fun editUser(
         @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
         @Valid @RequestBody @Parameter(description = "User nickname whose data is be updated") editUserRequestDto: EditUserRequestDto,
@@ -86,6 +102,7 @@ class AuthController(
         ]
     )
     @DeleteMapping("/delete")
+    @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
     fun deleteUser(
         @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
         @Valid @RequestBody @Parameter(description = "Delete user account") deleteUser: DeleteUserRequestDto
@@ -101,6 +118,7 @@ class AuthController(
         ]
     )
     @PostMapping("/logout")
+    @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
     fun logout(
         @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
         @Valid @RequestBody @Parameter(description = "User nickname") nickname: String,
