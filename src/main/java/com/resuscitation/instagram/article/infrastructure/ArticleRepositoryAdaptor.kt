@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ArticleRepositoryAdaptor(
-    private val jpaArticleRepository: JpaArticleRepository
+    private val jpaArticleRepository: JpaArticleRepository,
 ) : ArticleRepository {
     override fun findById(id: Long): Article? {
         return jpaArticleRepository.findById(id).orElse(null)

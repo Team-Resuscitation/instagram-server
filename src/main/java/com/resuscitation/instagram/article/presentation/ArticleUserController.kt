@@ -5,6 +5,5 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ArticleUserController(
-    private val articleService: ArticleService
-) {
-}
+    private val articleService: ArticleService,
+)

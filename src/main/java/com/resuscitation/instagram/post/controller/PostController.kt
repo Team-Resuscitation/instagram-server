@@ -33,7 +33,7 @@ class PostController(
         description = "Uploads a new post.",
         responses = [
             ApiResponse(responseCode = "200", description = "Post uploaded successfully"),
-        ]
+        ],
     )
     @GetMapping("/upload")
     fun uploadPost(
@@ -48,7 +48,7 @@ class PostController(
         description = "Fetches the details of a specific post by its ID.",
         responses = [
             ApiResponse(responseCode = "200", description = "Post retrieved successfully"),
-        ]
+        ],
     )
     @GetMapping("/{postId}")
     fun readPost(
@@ -63,8 +63,8 @@ class PostController(
         responses = [
             ApiResponse(responseCode = "200", description = "Post updated successfully"),
             ApiResponse(responseCode = "400", description = "Bad request"),
-            ApiResponse(responseCode = "404", description = "Post not found")
-        ]
+            ApiResponse(responseCode = "404", description = "Post not found"),
+        ],
     )
     @PatchMapping("/update/{postId}")
     fun updatePost(
@@ -80,8 +80,8 @@ class PostController(
         description = "Deletes a specific post by its ID.",
         responses = [
             ApiResponse(responseCode = "200", description = "Post deleted successfully"),
-            ApiResponse(responseCode = "404", description = "Post not found")
-        ]
+            ApiResponse(responseCode = "404", description = "Post not found"),
+        ],
     )
     @DeleteMapping("/delete/{postId}")
     fun deletePost(
@@ -95,8 +95,8 @@ class PostController(
         summary = "View user's timeline api",
         description = "Fetches posts from the user's timeline.",
         responses = [
-            ApiResponse(responseCode = "200", description = "Timeline retrieved successfully")
-        ]
+            ApiResponse(responseCode = "200", description = "Timeline retrieved successfully"),
+        ],
     )
     @GetMapping("/timeline")
     fun timeline(

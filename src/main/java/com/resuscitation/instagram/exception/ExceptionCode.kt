@@ -9,5 +9,5 @@ enum class ExceptionCode(val status: HttpStatus, val message: String) {
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "Invalid request data"),
     UNMATCHED_PASSWORD(HttpStatus.BAD_REQUEST, "Password does not match"),
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "Unauthorized access"),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error")
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
 }

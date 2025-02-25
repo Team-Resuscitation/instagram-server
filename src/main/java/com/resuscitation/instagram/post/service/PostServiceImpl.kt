@@ -9,7 +9,7 @@ import com.resuscitation.instagram.post.repository.MediaRepository
 import com.resuscitation.instagram.post.repository.PostRepository
 import org.springframework.stereotype.Service
 import java.time.Instant
-import java.util.*
+import java.util.Date
 
 @Service
 class PostServiceImpl(
@@ -18,21 +18,22 @@ class PostServiceImpl(
     private val mediaRepository: MediaRepository,
 ) : PostService {
     override fun uploadPost(postRequestDto: PostRequestDto): Boolean {
-        val post = postRepository.save(
-            Post(
-                author = postRequestDto.author,
-                imageCnt = postRequestDto.medias.count(),
-                content = postRequestDto.content,
-                timestamp = Date.from(Instant.now()),
+        val post =
+            postRepository.save(
+                Post(
+                    author = postRequestDto.author,
+                    imageCnt = postRequestDto.medias.count(),
+                    content = postRequestDto.content,
+                    timestamp = Date.from(Instant.now()),
+                ),
             )
-        )
         postRequestDto.medias.forEach { media ->
             mediaRepository.save(
                 Media(
                     postId = post.idx,
                     link = imageBBService.uploadImage(media),
                     contentType = MediaType.MEDIATYPE_IMAGE,
-                )
+                ),
             )
         }
         return true
@@ -54,7 +55,10 @@ class PostServiceImpl(
         )
     }
 
-    override fun updatePost(postId: String, postRequestDto: PostRequestDto): Boolean {
+    override fun updatePost(
+        postId: String,
+        postRequestDto: PostRequestDto,
+    ): Boolean {
         val post = postRepository.findByIdx(postId.toLong())
         postRepository.save(
             Post(
@@ -64,7 +68,7 @@ class PostServiceImpl(
                 timestamp = post.timestamp,
                 likes = post.likes,
                 comments = post.comments,
-            )
+            ),
         )
         return true
     }
@@ -84,7 +88,7 @@ class PostServiceImpl(
                 timestamp = Date.from(Instant.now()),
                 likes = 0,
                 comments = 0,
-            )
+            ),
         )
     }
 }

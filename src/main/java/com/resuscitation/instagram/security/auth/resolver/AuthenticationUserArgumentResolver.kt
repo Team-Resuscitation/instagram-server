@@ -12,9 +12,9 @@ import org.springframework.web.method.support.ModelAndViewContainer
 class AuthenticationUserArgumentResolver : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         return parameter.getParameterAnnotation(AuthenticationPrincipal::class.java) != null &&
-                AuthenticatedUserDto::class.java.isAssignableFrom(
-                    parameter.parameterType
-                )
+            AuthenticatedUserDto::class.java.isAssignableFrom(
+                parameter.parameterType,
+            )
     }
 
     override fun resolveArgument(

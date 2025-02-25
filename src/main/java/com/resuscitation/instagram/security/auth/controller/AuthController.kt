@@ -40,11 +40,11 @@ class AuthController(
         description = "Sign up for Instagram using a username, email, and password.",
         responses = [
             ApiResponse(responseCode = "200", description = "User registered successfully"),
-        ]
+        ],
     )
     @PostMapping("/instagram/register")
     fun instagramRegister(
-        @Valid @RequestBody @Parameter(description = "User registration request body") registerRequestDto: RegisterRequestDto
+        @Valid @RequestBody @Parameter(description = "User registration request body") registerRequestDto: RegisterRequestDto,
     ): ResponseEntity<RegisterResponseDto> {
         return ResponseEntity.ok(authServiceImpl.register(registerRequestDto))
     }
@@ -54,11 +54,11 @@ class AuthController(
         description = "Log in to Instagram using email and password.",
         responses = [
             ApiResponse(responseCode = "200", description = "User login successful"),
-        ]
+        ],
     )
     @PostMapping("/instagram/login")
     fun instagramLogin(
-        @Valid @RequestBody @Parameter(description = "User login request body") loginRequestDto: LoginRequestDto
+        @Valid @RequestBody @Parameter(description = "User login request body") loginRequestDto: LoginRequestDto,
     ): ResponseEntity<LoginResponseDto> {
         return ResponseEntity.ok(authServiceImpl.login(loginRequestDto))
     }
@@ -68,12 +68,12 @@ class AuthController(
         description = "Sign up or log in using Google OAuth2.",
         responses = [
             ApiResponse(responseCode = "200", description = "User registered successfully"),
-        ]
+        ],
     )
     @GetMapping("/google/{provider}/callback")
     fun googleCallback(
         @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
-        @PathVariable @Parameter(description = "Social login provider") provider: String
+        @PathVariable @Parameter(description = "Social login provider") provider: String,
     ): ResponseEntity<LoginResponseDto> {
         return ResponseEntity.ok(customOAuth2UserService.loadUser(user))
     }
@@ -83,7 +83,7 @@ class AuthController(
         description = "Allows a user to update their profile information, such as nickname or other details.",
         responses = [
             ApiResponse(responseCode = "200", description = "User information updated successfully"),
-        ]
+        ],
     )
     @PostMapping("/edit")
     @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
@@ -99,13 +99,13 @@ class AuthController(
         description = "Deletes the user's account permanently. Requires user authentication.",
         responses = [
             ApiResponse(responseCode = "200", description = "User account deleted successfully"),
-        ]
+        ],
     )
     @DeleteMapping("/delete")
     @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
     fun deleteUser(
         @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
-        @Valid @RequestBody @Parameter(description = "Delete user account") deleteUser: DeleteUserRequestDto
+        @Valid @RequestBody @Parameter(description = "Delete user account") deleteUser: DeleteUserRequestDto,
     ): ResponseEntity<DeleteUserResponseDto> {
         return ResponseEntity.ok(authServiceImpl.deleteUser(deleteUser))
     }
@@ -115,7 +115,7 @@ class AuthController(
         description = "Logs out the user by invalidating their current session token. Requires user authentication.",
         responses = [
             ApiResponse(responseCode = "200", description = "User logged out successfully"),
-        ]
+        ],
     )
     @PostMapping("/logout")
     @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)

@@ -16,7 +16,7 @@ class ProfileServiceImpl(
     private val mediaRepository: MediaRepository,
 ) : ProfileService {
     override fun showProfile(nickname: String): ProfileDto {
-        val profile = profileRepository.findByNickname(nickname).orElseThrow{IllegalArgumentException("User not found.")}
+        val profile = profileRepository.findByNickname(nickname).orElseThrow { IllegalArgumentException("User not found.") }
         return ProfileDto(
             nickname = profile.nickname,
             name = profile.name,
@@ -26,14 +26,18 @@ class ProfileServiceImpl(
         )
     }
 
-    override fun updateProfile(nickname: String, updateProfileDto: UpdateProfileDto): Boolean {
-        val profile = profileRepository.findByNickname(nickname).orElseThrow{IllegalArgumentException("User not found.")}
-        val updatedProfile = Profile(
-            nickname = updateProfileDto.nickname?: profile.nickname,
-            name = updateProfileDto.name?: profile.name,
-            introduce = updateProfileDto.introduce?: profile.introduce,
-            profileImage = updateProfileDto.profileImage?: profile.profileImage,
-        )
+    override fun updateProfile(
+        nickname: String,
+        updateProfileDto: UpdateProfileDto,
+    ): Boolean {
+        val profile = profileRepository.findByNickname(nickname).orElseThrow { IllegalArgumentException("User not found.") }
+        val updatedProfile =
+            Profile(
+                nickname = updateProfileDto.nickname ?: profile.nickname,
+                name = updateProfileDto.name ?: profile.name,
+                introduce = updateProfileDto.introduce ?: profile.introduce,
+                profileImage = updateProfileDto.profileImage ?: profile.profileImage,
+            )
         profileRepository.save(updatedProfile)
         return true
     }

@@ -2,13 +2,13 @@ package com.resuscitation.instagram.post.service
 
 import com.resuscitation.instagram.post.configuration.ImageBBProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.stereotype.Component
-import org.springframework.web.client.RestClient
-import org.springframework.web.multipart.MultipartFile
-import java.util.*
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import org.springframework.web.client.RestClient
+import org.springframework.web.multipart.MultipartFile
+import java.util.Base64
 
 @Component
 @EnableConfigurationProperties(ImageBBProperties::class)
@@ -22,13 +22,13 @@ class ImageBBService(
         val parts: MultiValueMap<String, Any> = LinkedMultiValueMap()
         parts.add("image", Base64.getEncoder().encodeToString(image.bytes))
 
-
-        val response: Map<*, *>? = restClient.post()
-            .uri("$IMGBB_API_URL?key=${imageBBProperties.apiKey}")
-            .contentType(MediaType.MULTIPART_FORM_DATA)
-            .body(parts)
-            .retrieve()
-            .body(Map::class.java)
+        val response: Map<*, *>? =
+            restClient.post()
+                .uri("$IMGBB_API_URL?key=${imageBBProperties.apiKey}")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(parts)
+                .retrieve()
+                .body(Map::class.java)
 
         // 업로드 결과에서 이미지 URL 추출
         val data = response?.get("data") as Map<*, *>?

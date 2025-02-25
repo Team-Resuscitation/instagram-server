@@ -9,9 +9,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 @Configuration
 class RedisConfig {
     @Bean
-    fun redisTemplate(
-        redisConnectionFactory: RedisConnectionFactory
-    ): RedisTemplate<*, *> {
+    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<*, *> {
         return RedisTemplate<Any, Any>().apply {
             this.connectionFactory = redisConnectionFactory
             this.keySerializer = StringRedisSerializer()

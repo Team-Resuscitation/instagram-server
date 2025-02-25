@@ -7,8 +7,10 @@ data class RegisterRequestDto(
     @Schema(description = "Nickname for the user", example = "user123")
     val nickname: String = "",
     @Schema(
-        description = "Password for the user. Must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.",
-        example = "Secure@1234"
+        description =
+            "Password must be at least 8 characters long and include uppercase, lowercase letters, " +
+                "numbers and special characters.",
+        example = "Secure@1234",
     )
     val password: String = "",
     @Schema(description = "User's phone number", example = "010-1234-5678")

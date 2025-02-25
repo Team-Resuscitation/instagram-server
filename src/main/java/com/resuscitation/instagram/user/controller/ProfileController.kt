@@ -32,11 +32,13 @@ class ProfileController(
         description = "Fetches the profile details of a user by their nickname.",
         responses = [
             ApiResponse(responseCode = "200", description = "Profile retrieved successfully"),
-            ApiResponse(responseCode = "404", description = "Profile not found")
-        ]
+            ApiResponse(responseCode = "404", description = "Profile not found"),
+        ],
     )
     @GetMapping("/{nickname}")
-    fun showProfile(@PathVariable nickname: String): ResponseEntity<ProfileDto> {
+    fun showProfile(
+        @PathVariable nickname: String,
+    ): ResponseEntity<ProfileDto> {
         return ResponseEntity.ok(profileService.showProfile(nickname))
     }
 
@@ -46,8 +48,8 @@ class ProfileController(
         responses = [
             ApiResponse(responseCode = "200", description = "Profile updated successfully"),
             ApiResponse(responseCode = "400", description = "Bad request"),
-            ApiResponse(responseCode = "404", description = "Profile not found")
-        ]
+            ApiResponse(responseCode = "404", description = "Profile not found"),
+        ],
     )
     @PatchMapping("/update/{nickname}")
     fun updateProfile(
