@@ -7,5 +7,6 @@ import org.springframework.security.core.Authentication
 
 interface JwtDecoder {
     fun getAuthentication(user: AuthenticatedUserDto): Authentication
+
     fun validateToken(jws: Jws<Claims>): Boolean
 }

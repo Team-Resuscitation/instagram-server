@@ -2,7 +2,7 @@ package com.resuscitation.instagram.security.auth.dto
 
 import com.resuscitation.instagram.security.auth.domain.UserRole
 import io.swagger.v3.oas.annotations.media.Schema
-import java.util.*
+import java.util.Date
 
 @Schema(description = "Authenticated user object")
 data class AuthenticatedUserDto(

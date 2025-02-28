@@ -1,0 +1,58 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Build and Check
+
+on:
+  push:
+    branches: [ "*" ]
+
+permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+
+      - name: Set up JDK and use cache
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: adopt
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Setup Redis
+        uses: supercharge/redis-github-action@1.1.0
+        with:
+          redis-version: 7
+
+      - name: Grant execute permission for
+        run: chmod +x gradlew
+
+      - name: Lint Gradle
+        run: ./gradlew ktlintCheck
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: ${{ always() }}
+        with:
+          files: build/test-results/**/*.xml

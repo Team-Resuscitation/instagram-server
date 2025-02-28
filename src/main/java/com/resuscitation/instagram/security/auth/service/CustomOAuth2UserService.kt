@@ -25,14 +25,15 @@ class CustomOAuth2UserService(
             userRepository.save(
                 User(
                     nickname = nickname,
-                )
+                ),
             )
         }
         return com.resuscitation.instagram.security.auth.dto.LoginResponseDto(
-            accessToken = jwtProvider.generateToken(
-                userRepository.findByNickname(nickname),
-                jwtProperties.accessExpiration
-            )
+            accessToken =
+                jwtProvider.generateToken(
+                    userRepository.findByNickname(nickname),
+                    jwtProperties.accessExpiration,
+                ),
         )
     }
 }

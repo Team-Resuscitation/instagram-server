@@ -5,13 +5,16 @@ import org.springframework.stereotype.Service
 
 @Service
 class PasswordServiceImpl(
-    private val passwordEncoder: BCryptPasswordEncoder
+    private val passwordEncoder: BCryptPasswordEncoder,
 ) : PasswordService {
     override fun encodePassword(password: String): String {
         return passwordEncoder.encode(password)
     }
 
-    override fun verifyPassword(rawPassword: String, encodedPassword: String): Boolean {
+    override fun verifyPassword(
+        rawPassword: String,
+        encodedPassword: String,
+    ): Boolean {
         return passwordEncoder.matches(rawPassword, encodedPassword)
     }
 }

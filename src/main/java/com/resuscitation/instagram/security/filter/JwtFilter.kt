@@ -9,19 +9,20 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
 class JwtFilter(
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val header = request.getHeader(AUTHORIZATION)
-        val jwt = if (header != null && header.startsWith("Bearer ")) {
-            header.substring(7)
-        } else {
-            throw IllegalArgumentException("Invalid token format: missing 'Bearer ' prefix")
-        }
+        val jwt =
+            if (header != null && header.startsWith("Bearer ")) {
+                header.substring(7)
+            } else {
+                throw IllegalArgumentException("Invalid token format: missing 'Bearer ' prefix")
+            }
 
         val authenticatedUser = jwtProvider.extractToken(jwt)
         try {

@@ -3,7 +3,16 @@ package com.resuscitation.instagram.security.auth.service
 import com.resuscitation.instagram.exception.Exception
 import com.resuscitation.instagram.exception.ExceptionCode
 import com.resuscitation.instagram.security.auth.domain.User
-import com.resuscitation.instagram.security.auth.dto.*
+import com.resuscitation.instagram.security.auth.dto.DeleteUserRequestDto
+import com.resuscitation.instagram.security.auth.dto.DeleteUserResponseDto
+import com.resuscitation.instagram.security.auth.dto.EditUserRequestDto
+import com.resuscitation.instagram.security.auth.dto.EditUserResponseDto
+import com.resuscitation.instagram.security.auth.dto.LoginRequestDto
+import com.resuscitation.instagram.security.auth.dto.LoginResponseDto
+import com.resuscitation.instagram.security.auth.dto.PasswordChangeRequestDto
+import com.resuscitation.instagram.security.auth.dto.PasswordChangeResponseDto
+import com.resuscitation.instagram.security.auth.dto.RegisterRequestDto
+import com.resuscitation.instagram.security.auth.dto.RegisterResponseDto
 import com.resuscitation.instagram.security.auth.repository.UserRepository
 import com.resuscitation.instagram.security.configuration.JwtProperties
 import com.resuscitation.instagram.security.jwt.JwtProvider
@@ -55,38 +64,41 @@ class AuthServiceImpl(
         }
 
         // sign up
-        val user = userRepository.save(
-            User(
-                nickname = registerRequestDto.nickname,
-                password = encodedPassword,
-                phoneNumber = registerRequestDto.phoneNumber,
-                email = registerRequestDto.email,
+        val user =
+            userRepository.save(
+                User(
+                    nickname = registerRequestDto.nickname,
+                    password = encodedPassword,
+                    phoneNumber = registerRequestDto.phoneNumber,
+                    email = registerRequestDto.email,
+                ),
             )
-        )
-        val profile = profileRepository.save(
-            Profile(
-                nickname = registerRequestDto.nickname,
+        val profile =
+            profileRepository.save(
+                Profile(
+                    nickname = registerRequestDto.nickname,
+                ),
             )
-        )
 
         return RegisterResponseDto(true, "User registered successfully.")
     }
 
     override fun login(loginRequestDto: LoginRequestDto): LoginResponseDto {
         // find user
-        val user: User = when {
-            // email check
-            loginRequestDto.email != null
+        val user: User =
+            when {
+                // email check
+                loginRequestDto.email != null
                 -> userRepository.findByEmail(loginRequestDto.email)
-            // nickname check
-            loginRequestDto.nickname != null
+                // nickname check
+                loginRequestDto.nickname != null
                 -> userRepository.findByNickname(loginRequestDto.nickname)
-            // phone number check
-            loginRequestDto.phoneNumber != null
+                // phone number check
+                loginRequestDto.phoneNumber != null
                 -> userRepository.findByPhoneNumber(loginRequestDto.phoneNumber)
 
-            else -> throw Exception(ExceptionCode.INVALID_REQUEST)
-        }
+                else -> throw Exception(ExceptionCode.INVALID_REQUEST)
+            }
 
         // password check
         val encodedLoginFormPassword = passwordServiceImpl.encodePassword(loginRequestDto.password)
@@ -104,11 +116,12 @@ class AuthServiceImpl(
 
     override fun editUser(editUserRequestDto: EditUserRequestDto): EditUserResponseDto {
         val user = userRepository.findByNickname(editUserRequestDto.nickname)
-        val editedUser = User(
-            nickname = editUserRequestDto.nickname,
-            email = editUserRequestDto.email ?: user.email,
-            phoneNumber = editUserRequestDto.phoneNumber ?: user.phoneNumber,
-        )
+        val editedUser =
+            User(
+                nickname = editUserRequestDto.nickname,
+                email = editUserRequestDto.email ?: user.email,
+                phoneNumber = editUserRequestDto.phoneNumber ?: user.phoneNumber,
+            )
         userRepository.save(editedUser)
         return EditUserResponseDto(true, "User info edited successfully.")
     }
@@ -131,8 +144,8 @@ class AuthServiceImpl(
                 password = passwordServiceImpl.encodePassword(newPassword),
                 phoneNumber = user.phoneNumber,
                 email = user.email,
-                userRole = user.userRole
-            )
+                userRole = user.userRole,
+            ),
         )
         return PasswordChangeResponseDto(true, "Success changing password.")
     }

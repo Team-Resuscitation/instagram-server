@@ -6,6 +6,13 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface FollowRequestRepository : JpaRepository<FollowRequest, Long> {
-    fun findByFollowerAndFollowing(follower: String, following: String): FollowRequest
-    fun deleteByFollowerAndFollowing(follower: String, following: String)
+    fun findByFollowerAndFollowing(
+        follower: String,
+        following: String,
+    ): FollowRequest
+
+    fun deleteByFollowerAndFollowing(
+        follower: String,
+        following: String,
+    )
 }

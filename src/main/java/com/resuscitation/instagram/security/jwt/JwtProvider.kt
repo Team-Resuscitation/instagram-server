@@ -19,7 +19,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.time.Instant
-import java.util.*
+import java.util.Date
 import javax.crypto.SecretKey
 
 @Component
@@ -27,31 +27,36 @@ import javax.crypto.SecretKey
 class JwtProvider(
     private val jwtProperties: JwtProperties,
     private val redisTemplate: RedisTemplate<Long, Any>,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : JwtEncoder, JwtDecoder, JwtExtractor, JwtService {
     private val hmacSecretKey: SecretKey = Keys.hmacShaKeyFor(jwtProperties.secretKey.toByteArray())
     private val algorithm: MacAlgorithm = HS256
 
-    override fun generateToken(user: User, expiration: Long): String {
+    override fun generateToken(
+        user: User,
+        expiration: Long,
+    ): String {
         val currentTime = Instant.now()
-        val jwt = Jwts.builder()
-            .subject(user.nickname)
-            .claim("role", UserRole.ROLE_BASIC.name)
-            .claim("audience", "instagram")
-            .issuer("team.resuscitation")
-            .issuedAt(Date.from(currentTime))
-            .expiration(Date.from(currentTime.plusMillis(jwtProperties.accessExpiration)))
-            .signWith(hmacSecretKey, algorithm)
-            .compact()
+        val jwt =
+            Jwts.builder()
+                .subject(user.nickname)
+                .claim("role", UserRole.ROLE_BASIC.name)
+                .claim("audience", "instagram")
+                .issuer("team.resuscitation")
+                .issuedAt(Date.from(currentTime))
+                .expiration(Date.from(currentTime.plusMillis(jwtProperties.accessExpiration)))
+                .signWith(hmacSecretKey, algorithm)
+                .compact()
         redisTemplate.opsForValue().set(user.uuid, jwt)
         return jwt
     }
 
     override fun extractToken(token: String): AuthenticatedUserDto {
-        val jws = Jwts.parser()
-            .verifyWith(hmacSecretKey)
-            .build()
-            .parseSignedClaims(token)
+        val jws =
+            Jwts.parser()
+                .verifyWith(hmacSecretKey)
+                .build()
+                .parseSignedClaims(token)
 
         validateToken(jws)
 
@@ -94,7 +99,6 @@ class JwtProvider(
 
         return true
     }
-
 
     override fun invalidateToken(nickname: String): Boolean {
         redisTemplate.delete(userRepository.findByNickname(nickname).uuid)
