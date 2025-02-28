@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: instagram
+
+  datasource:
+    driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
+    url: ${DATABASE_URL:jdbc:h2:mem:core?MODE=MYSQL}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+instagram:
+  imgbb:
+    api-key: ${IMGBB_API_KEY}
+  jwt:
+    access-expiration: ${JWT_ACCESS_EXPIRATION:3600}
+    long-lived-access-expiration: ${JWT_LONG_LIVED_ACCESS_EXPIRATION:2592000}
+    secret-key: ${JWT_SECRET_KEY:this-is-secret-key-for-instagram}

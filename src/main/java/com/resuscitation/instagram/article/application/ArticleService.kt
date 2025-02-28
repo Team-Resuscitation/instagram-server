@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ArticleService(
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
 ) {
     @Transactional(readOnly = true)
     fun getArticle(id: Long): Article {
@@ -16,11 +16,12 @@ class ArticleService(
 
     @Transactional
     fun createArticle() {
-        val article = Article.create(
-            title = "title",
-            content = "content",
-            authorId = 1L
-        )
+        val article =
+            Article.create(
+                title = "title",
+                content = "content",
+                authorId = 1L,
+            )
         articleRepository.save(article)
     }
 
@@ -28,13 +29,13 @@ class ArticleService(
     fun updateArticle(
         id: Long,
         title: String,
-        content: String
+        content: String,
     ) {
         val article: Article = articleRepository.findById(id) ?: throw IllegalArgumentException()
 
         article.update(
             title = title,
-            content = content
+            content = content,
         )
     }
 }

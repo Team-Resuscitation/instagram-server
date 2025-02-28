@@ -15,7 +15,7 @@ data class PasswordChangeRequestDto(
     val newPassword: String = "",
     @Schema(description = "Confirmation of the new password", example = "password!!!")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d!@#\$%^&*()\\-_=+{};:,<.>/?]).{8,}\$\n")
-    val confirmPassword: String = ""
+    val confirmPassword: String = "",
 )
 
 @Schema(description = "Password changing form object")

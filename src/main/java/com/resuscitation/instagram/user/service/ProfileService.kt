@@ -5,5 +5,9 @@ import com.resuscitation.instagram.user.dto.UpdateProfileDto
 
 interface ProfileService {
     fun showProfile(nickname: String): ProfileDto
-    fun updateProfile(nickname: String, updateProfileDto: UpdateProfileDto): Boolean
+
+    fun updateProfile(
+        nickname: String,
+        updateProfileDto: UpdateProfileDto,
+    ): Boolean
 }
