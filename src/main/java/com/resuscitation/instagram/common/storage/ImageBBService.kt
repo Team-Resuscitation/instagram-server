@@ -1,7 +1,6 @@
 package com.resuscitation.instagram.common.storage
 
 import com.resuscitation.instagram.common.storage.properties.ImageBBProperties
-import java.util.Base64
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Profile
 import org.springframework.http.MediaType
@@ -10,6 +9,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClient
 import org.springframework.web.multipart.MultipartFile
+import java.util.Base64
 
 @Profile("!test")
 @Component

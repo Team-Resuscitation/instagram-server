@@ -34,24 +34,26 @@ class AuthService(
         // password encoding
         val encodedPassword = passwordEncoder.encode(registerRequest.password)
 
-        val user = userRepository.save(
-            User(
-                email = registerRequest.email,
-                nickname = registerRequest.nickname,
-                password = encodedPassword,
-                phoneNumber = registerRequest.phoneNumber,
+        val user =
+            userRepository.save(
+                User(
+                    email = registerRequest.email,
+                    nickname = registerRequest.nickname,
+                    password = encodedPassword,
+                    phoneNumber = registerRequest.phoneNumber,
+                ),
             )
-        )
 
         return tokenProvider.encode(user)
     }
 
     fun login(loginRequest: LoginRequest): String {
         // 유저를 검색할 때 이메일, 닉네임, 전화번호 순으로 검색
-        val user: User = userRepository.findByEmail(loginRequest.key)
-            ?: userRepository.findByNickname(loginRequest.key)
-            ?: userRepository.findByPhoneNumber(loginRequest.key)
-            ?: throw IllegalArgumentException("User not found.")
+        val user: User =
+            userRepository.findByEmail(loginRequest.key)
+                ?: userRepository.findByNickname(loginRequest.key)
+                ?: userRepository.findByPhoneNumber(loginRequest.key)
+                ?: throw IllegalArgumentException("User not found.")
 
         // 패스워드 확인
         if (!passwordEncoder.matches(loginRequest.password, user.password)) {

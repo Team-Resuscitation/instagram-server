@@ -9,7 +9,7 @@ data class RegisterRequest(
     @Schema(
         description =
             "Password must be at least 8 characters long and include uppercase, lowercase letters, " +
-                    "numbers and special characters.",
+                "numbers and special characters.",
         example = "Secure@1234",
     )
     val password: String,

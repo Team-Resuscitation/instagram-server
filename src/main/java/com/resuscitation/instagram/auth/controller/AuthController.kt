@@ -30,7 +30,7 @@ class AuthController(
         @Valid @RequestBody @Parameter(description = "User registration request body") registerRequest: RegisterRequest,
     ): ResponseEntity<LoginResponse> {
         return ResponseEntity.ok(
-            LoginResponse(authService.register(registerRequest))
+            LoginResponse(authService.register(registerRequest)),
         )
     }
 
@@ -43,7 +43,7 @@ class AuthController(
         @Valid @RequestBody @Parameter(description = "User login request body") loginRequest: LoginRequest,
     ): ResponseEntity<LoginResponse> {
         return ResponseEntity.ok(
-            LoginResponse(authService.login(loginRequest))
+            LoginResponse(authService.login(loginRequest)),
         )
     }
 }

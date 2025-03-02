@@ -27,7 +27,7 @@ class UserController(
         @AuthenticationPrincipal user: AuthenticatedUser,
     ): ResponseEntity<User> {
         return ResponseEntity.ok(
-            userRepository.findById(user.userId).get()
+            userRepository.findById(user.userId).get(),
         )
     }
 }

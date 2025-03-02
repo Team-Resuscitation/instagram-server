@@ -8,11 +8,11 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.Jwts.SIG.HS256
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.MacAlgorithm
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.Date
 import javax.crypto.SecretKey
-import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.stereotype.Component
 
 @Component
 @EnableConfigurationProperties(JwtProperties::class)
@@ -22,9 +22,7 @@ class TokenProvider(
     private val hmacSecretKey: SecretKey = Keys.hmacShaKeyFor(jwtProperties.secretKey.toByteArray())
     private val algorithm: MacAlgorithm = HS256
 
-    override fun encode(
-        user: User,
-    ): String {
+    override fun encode(user: User): String {
         return Jwts.builder()
             .subject(user.id.toString())
             .claim("roles", user.roles)
@@ -52,5 +50,4 @@ class TokenProvider(
             expiresAt = claims.expiration.toInstant(),
         )
     }
-
 }

@@ -8,6 +8,9 @@ data class JwtProperties(
     val secretKey: String,
     /** 발행자 */
     val issuer: String,
-    /** 액세스 토큰 만료 시간 */
-    val expiration: Long = 30 * 60 * 1000, // 30 minutes
+    /**
+     * 액세스 토큰 만료 시간
+     * Default: 30분
+     */
+    val expiration: Long = 30 * 60 * 1000,
 )

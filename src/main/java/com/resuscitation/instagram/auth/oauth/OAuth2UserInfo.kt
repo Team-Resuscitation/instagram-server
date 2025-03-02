@@ -1,4 +1,4 @@
-package     com.resuscitation.instagram.auth.oauth
+package com.resuscitation.instagram.auth.oauth
 
 abstract class OAuth2UserInfo(
     var attributes: Map<String, Any>,

@@ -1,6 +1,5 @@
 package com.resuscitation.instagram.config
 
-
 import com.resuscitation.instagram.auth.TokenAuthenticationFilter
 import com.resuscitation.instagram.auth.TokenProvider
 import com.resuscitation.instagram.auth.handler.OAuth2SuccessHandler

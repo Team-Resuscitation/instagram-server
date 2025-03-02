@@ -14,19 +14,20 @@ class TokenAuthenticationFilter(
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val token: String? = request.getHeader("Authorization")?.substringAfter("Bearer ")
 
         if (!token.isNullOrBlank()) {
             val authentication: AuthenticatedUser = tokenProvider.decode(token)
 
-            //인증된 정보 SecurityContext에 저장
-            SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(
-                authentication,
-                token,
-                authentication.roles
-            )
+            // 인증된 정보 SecurityContext에 저장
+            SecurityContextHolder.getContext().authentication =
+                UsernamePasswordAuthenticationToken(
+                    authentication,
+                    token,
+                    authentication.roles,
+                )
         }
         filterChain.doFilter(request, response)
     }

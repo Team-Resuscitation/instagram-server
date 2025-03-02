@@ -16,9 +16,10 @@ class CustomUserDetailsService(
             return null
         }
 
-        val user: User? = userRepository.findByIdOrNull(
-            username.toLong()
-        )
+        val user: User? =
+            userRepository.findByIdOrNull(
+                username.toLong(),
+            )
 
         return user?.let {
             UserPrincipal.create(it)

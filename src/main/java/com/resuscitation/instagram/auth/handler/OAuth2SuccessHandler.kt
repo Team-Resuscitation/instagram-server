@@ -19,13 +19,14 @@ class OAuth2SuccessHandler(
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        authentication: Authentication
+        authentication: Authentication,
     ) {
         val oAuth2User = authentication.principal as OAuth2User
         val identifier = oAuth2User.name
 
-        val user: User = userRepository.findByIdOrNull(identifier.toLong())
-            ?: throw IllegalArgumentException("User not found with identifier: $identifier")
+        val user: User =
+            userRepository.findByIdOrNull(identifier.toLong())
+                ?: throw IllegalArgumentException("User not found with identifier: $identifier")
 
         val token = tokenProvider.encode(user)
 

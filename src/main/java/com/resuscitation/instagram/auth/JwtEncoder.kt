@@ -9,7 +9,5 @@ interface JwtEncoder {
      * @param roles 사용자 권한
      * @return 생성된 토큰
      */
-    fun encode(
-        user: User,
-    ): String
+    fun encode(user: User): String
 }

@@ -19,9 +19,7 @@ data class ProfileData(
     val followingCount: Int,
 ) {
     companion object {
-        fun from(
-            user: User,
-        ): ProfileData {
+        fun from(user: User): ProfileData {
             return ProfileData(
                 id = user.id,
                 nickname = user.nickname,

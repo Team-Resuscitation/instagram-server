@@ -50,26 +50,24 @@ class UserPrincipal(
     }
 
     companion object {
-        fun create(
-            user: User
-        ): UserPrincipal {
+        fun create(user: User): UserPrincipal {
             return UserPrincipal(
                 userId = user.id.toString(),
                 password = user.password,
                 authorities = user.roles,
-                attributes = mapOf()
+                attributes = mapOf(),
             )
         }
 
         fun create(
             user: User,
-            attributes: Map<String?, Any?>
+            attributes: Map<String?, Any?>,
         ): UserPrincipal {
             return UserPrincipal(
                 userId = user.id.toString(),
                 password = user.password,
                 authorities = user.roles,
-                attributes = attributes
+                attributes = attributes,
             )
         }
     }

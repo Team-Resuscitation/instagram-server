@@ -40,10 +40,9 @@ class UsersController(
         @PathVariable nickname: String,
     ): ResponseEntity<ProfileData> {
         return ResponseEntity.ok(
-            userService.getProfile(nickname)
+            userService.getProfile(nickname),
         )
     }
-
 
     @PatchMapping("/{userId}")
     @PreAuthorize("#userId == #authenticatedUser.userId")
@@ -72,10 +71,11 @@ class UsersController(
     @PatchMapping("/{userId}/password")
     @PreAuthorize("#userId == #authenticatedUser.userId")
     @Operation(
-        summary = "비밀번호 변경", description = """
+        summary = "비밀번호 변경",
+        description = """
 <h2>현재 비밀번호를 입력받아 새로운 비밀번호로 변경합니다.</h2>
 <p>소셜로그인으로 회원가입 한 경우, currentPassword는 null로 보냅니다.</p>
-"""
+""",
     )
     @SecurityRequirement(name = BEARER_AUTH)
     fun changePassword(

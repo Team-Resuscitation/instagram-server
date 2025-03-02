@@ -7,14 +7,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
-
     /**
      * OAuth2 제공자를 통해 유저 정보를 조회합니다.
      * @param provider 제공자
      * @return 유저 정보
      */
     fun findByProviders(provider: Provider): User?
-
 
     /**
      * 닉네임으로 유저 정보를 조회합니다.
@@ -36,7 +34,6 @@ interface UserRepository : JpaRepository<User, Long> {
      * @return 존재 여부 (true: 존재, false: 미존재)
      */
     fun existsByPhoneNumber(phoneNumber: String): Boolean
-
 
     fun findByEmail(email: String): User?
 

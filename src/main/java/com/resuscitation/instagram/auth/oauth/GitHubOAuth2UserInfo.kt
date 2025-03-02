@@ -1,4 +1,4 @@
-package     com.resuscitation.instagram.auth.oauth
+package com.resuscitation.instagram.auth.oauth
 
 class GitHubOAuth2UserInfo(
     attributes: Map<String, Any>,

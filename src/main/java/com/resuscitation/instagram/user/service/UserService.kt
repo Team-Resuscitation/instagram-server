@@ -53,7 +53,10 @@ class UserService(
      * @return 변경된 이미지 URL
      */
     @Transactional
-    fun changeProfileImage(userId: Long, image: MultipartFile): String {
+    fun changeProfileImage(
+        userId: Long,
+        image: MultipartFile,
+    ): String {
         val user: User = userRepository.findById(userId).orElseThrow { IllegalArgumentException("User not found.") }
         val imageUrl = storageService.upload(image)
         user.profileImage = imageUrl
@@ -62,8 +65,9 @@ class UserService(
 
     @Transactional(readOnly = true)
     fun getProfile(nickname: String): ProfileData {
-        val user = userRepository.findByNickname(nickname)
-            ?: throw IllegalArgumentException("User not found")
+        val user =
+            userRepository.findByNickname(nickname)
+                ?: throw IllegalArgumentException("User not found")
         return ProfileData.from(user)
     }
 

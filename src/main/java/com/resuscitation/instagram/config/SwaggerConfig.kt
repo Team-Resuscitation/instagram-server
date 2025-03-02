@@ -34,7 +34,8 @@ class SwaggerConfig(
         return SecurityScheme()
             .type(SecurityScheme.Type.HTTP)
             .description(
-                """<h3>Instagram Clone 서비스를 이용하기 위해서는 로그인이 필요합니다.</h3>
+                """
+                <h3>Instagram Clone 서비스를 이용하기 위해서는 로그인이 필요합니다.</h3>
                 <p>엑세스 토큰은 아래 경로를 통해 발급받을 수 있습니다.</p>
                 <h4>로그인 방법</h4>
                 <ol>
