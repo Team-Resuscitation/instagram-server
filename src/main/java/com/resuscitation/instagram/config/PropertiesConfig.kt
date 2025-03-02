@@ -1,6 +1,6 @@
 package com.resuscitation.instagram.config
 
-import com.resuscitation.instagram.config.data.GitProperties
+import com.resuscitation.instagram.config.properties.GitProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
