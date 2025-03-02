@@ -289,3 +289,5 @@ gradle-app.setting
 src/main/resources/properties.yaml
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,intellij,visualstudiocode,java,kotlin
+
+.ENV
