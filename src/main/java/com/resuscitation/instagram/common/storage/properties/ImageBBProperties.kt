@@ -1,4 +1,4 @@
-package com.resuscitation.instagram.post.configuration
+package com.resuscitation.instagram.common.storage.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
