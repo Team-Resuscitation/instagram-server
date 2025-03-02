@@ -1,107 +1,65 @@
 package com.resuscitation.instagram.post.controller
 
-import com.resuscitation.instagram.config.SwaggerConfig
+import com.resuscitation.instagram.common.domain.AuthenticatedUser
+import com.resuscitation.instagram.config.SwaggerConfig.Companion.BEARER_AUTH
+import com.resuscitation.instagram.config.SwaggerConfig.Companion.POST_API
 import com.resuscitation.instagram.post.dto.PostRequestDto
 import com.resuscitation.instagram.post.dto.PostResponseDto
-import com.resuscitation.instagram.post.service.PostServiceImpl
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v2/post")
-@Tag(name = "Post", description = "Post Controller APIs")
-@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
-class PostController(
-    private val postService: PostServiceImpl,
-) {
-    @Operation(
-        summary = "Post uploading api",
-        description = "Uploads a new post.",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Post uploaded successfully"),
-        ],
-    )
-    @GetMapping("/upload")
+@RequestMapping("/api/v2/posts")
+@Tag(name = POST_API)
+class PostController {
+    @PostMapping
+    @Operation(summary = "게시글 작성 API")
+    @SecurityRequirement(name = BEARER_AUTH)
     fun uploadPost(
-        @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
         @Valid @RequestBody postRequestDto: PostRequestDto,
     ): ResponseEntity<Boolean> {
-        return ResponseEntity.ok(postService.uploadPost(postRequestDto))
+        TODO("Not yet implemented")
     }
 
-    @Operation(
-        summary = "Post reading api",
-        description = "Fetches the details of a specific post by its ID.",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Post retrieved successfully"),
-        ],
-    )
     @GetMapping("/{postId}")
+    @Operation(summary = "게시글 조회 API")
     fun readPost(
         @PathVariable postId: String,
     ): ResponseEntity<PostResponseDto> {
-        return ResponseEntity.ok(postService.readPost(postId))
+        TODO("Not yet implemented")
     }
 
-    @Operation(
-        summary = "Post updating api",
-        description = "Updates an existing post using its ID.",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Post updated successfully"),
-            ApiResponse(responseCode = "400", description = "Bad request"),
-            ApiResponse(responseCode = "404", description = "Post not found"),
-        ],
-    )
-    @PatchMapping("/update/{postId}")
+    @PatchMapping("/{postId}")
+    @Operation(summary = "게시글 수정 API")
+    @SecurityRequirement(name = BEARER_AUTH)
     fun updatePost(
-        @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
         @PathVariable postId: String,
         @Valid @RequestBody postRequestDto: PostRequestDto,
     ): ResponseEntity<Boolean> {
-        return ResponseEntity.ok(postService.updatePost(postId, postRequestDto))
+        TODO("Not yet implemented")
     }
 
-    @Operation(
-        summary = "Post deleting api",
-        description = "Deletes a specific post by its ID.",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Post deleted successfully"),
-            ApiResponse(responseCode = "404", description = "Post not found"),
-        ],
-    )
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("/{postId}")
+    @Operation(summary = "게시글 삭제 API")
+    @SecurityRequirement(name = BEARER_AUTH)
     fun deletePost(
-        @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
         @PathVariable postId: String,
     ): ResponseEntity<Boolean> {
-        return ResponseEntity.ok(postService.deletePost(postId))
-    }
-
-    @Operation(
-        summary = "View user's timeline api",
-        description = "Fetches posts from the user's timeline.",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Timeline retrieved successfully"),
-        ],
-    )
-    @GetMapping("/timeline")
-    fun timeline(
-        @AuthenticationPrincipal @Parameter(hidden = true) user: OAuth2User,
-    ): ResponseEntity<List<PostResponseDto>> {
-        return ResponseEntity.ok(postService.timeline(user.name))
+        TODO("Not yet implemented")
     }
 }
