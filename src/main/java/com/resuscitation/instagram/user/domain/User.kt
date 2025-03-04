@@ -27,7 +27,7 @@ class User(
     val email: String,
     /** 사용자 전화번호 */
     @Column(unique = true)
-    val phoneNumber: String? = null,
+    var phoneNumber: String? = null,
     /** 사용자 비밀번호 */
     var password: String? = null,
     /** OAuth Provider */
@@ -40,13 +40,11 @@ class User(
     /** 사용자 프로필 이미지 */
     var profileImage: String? = null,
     /** 사용자 소개 */
-    val bio: String? = null,
+    var bio: String? = null,
     /** 팔로워 */
-    @ElementCollection(fetch = FetchType.LAZY)
-    val follwers: Set<String> = emptySet(),
     var followersCount: Int = 0,
     /** 팔로잉 */
-    @ElementCollection(fetch = FetchType.LAZY)
-    val followings: Set<String> = emptySet(),
     var followingsCount: Int = 0,
+    /** 비공개 계정 여부 */
+    var isPrivate: Boolean = false,
 )
